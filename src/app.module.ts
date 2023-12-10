@@ -6,9 +6,8 @@ import {
   NestMiddleware,
   NestModule,
 } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { NextFunction, Request, Response } from 'express';
+import { FirebaseModule } from './firebase/firebase.module';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
@@ -28,9 +27,9 @@ export class LoggerMiddleware implements NestMiddleware {
 }
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [FirebaseModule],
+  controllers: [],
+  providers: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
