@@ -1,4 +1,4 @@
 import { Controller } from '@nestjs/common';
 
-@Controller('message')
+@Controller('/api/v1/message')
 export class MessageController {}
