@@ -13,4 +13,9 @@ export class FirebaseService {
 
     this.db = admin.firestore();
   }
+
+  async insert(collection: string, data: any) {
+    const ref = await this.db.collection(collection).add(data);
+    return ref.id;
+  }
 }
