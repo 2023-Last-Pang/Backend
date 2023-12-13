@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { FirebaseService } from '../firebase/firebase.service';
 import { MessageCreateDto } from './dto/message-create.dto';
-import { MessageNotFoundException } from '../global/error/exceptions/message.exception';
+import { Message } from './model/message.model';
 
 @Controller('/api/v1/messages')
 export class MessageController {
@@ -9,6 +9,7 @@ export class MessageController {
 
   @Post()
   async create(@Body() messageCreateDto: MessageCreateDto) {
-    throw new MessageNotFoundException();
+    const message = Message.of(messageCreateDto);
+    await this.firebaseService.insert('messages', message);
   }
 }
