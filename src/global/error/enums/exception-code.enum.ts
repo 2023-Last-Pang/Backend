@@ -5,3 +5,7 @@ export enum GlobalExceptionCodeEnum {
 export enum MessageExceptionCodeEnum {
   NotFound = 'M0001',
 }
+
+export enum AuthExceptionEnum {
+  InvalidCode = 'A0001',
+}
