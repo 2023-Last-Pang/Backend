@@ -1,15 +1,22 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Role } from './Roles.enum';
 import { InvalidVerificationCodeException } from '../global/error/exceptions/auth.exceptions';
+import { FirebaseService } from '../firebase/firebase.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly firebaseService: FirebaseService,
+  ) {}
 
-  async getTokenByCode(token: string) {
-    const tmpCode = 'TEST';
-    if (tmpCode != token) {
+  async getTokenByCode(code: string) {
+    const { code: verificationCode } = await this.firebaseService.getOne(
+      'codes',
+      'verification',
+    );
+    if (verificationCode != code) {
       throw new InvalidVerificationCodeException();
     }
     return await this.createToken();
@@ -20,16 +27,4 @@ export class AuthService {
     const accessToken = await this.jwtService.signAsync(payload);
     return { accessToken };
   }
-
-  // async validate<T extends object>(token: string) {
-  //   try {
-  //     console.log(token);
-  //     return await this.jwtService.verify<T>(token, {
-  //       secret: 'testSecretKeyTestSecretKeyTestSecretKey',
-  //     });
-  //   } catch (e) {
-  //     console.log(e);
-  //     throw new UnauthorizedException();
-  //   }
-  // }
 }

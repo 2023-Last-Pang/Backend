@@ -10,10 +10,4 @@ export class AuthController {
   async verify(@Body() verifyCodeDto: VerifyCodeDto) {
     return await this.authService.getTokenByCode(verifyCodeDto.code);
   }
-
-  // 테스트용 토큰 검증 API
-  // @Get('/validate')
-  // async testValidate(verifyCodeDto: VerifyCodeDto) {
-  //   await this.authService.validate(verifyCodeDto.code);
-  // }
 }
