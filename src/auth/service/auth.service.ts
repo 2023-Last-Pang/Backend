@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Role } from './Roles.enum';
-import { InvalidVerificationCodeException } from '../global/error/exceptions/auth.exceptions';
-import { FirebaseService } from '../firebase/firebase.service';
+import { Role } from '../enums/Roles.enum';
+import { InvalidVerificationCodeException } from '../../global/error/exceptions/auth.exception';
+import { FirebaseService } from '../../firebase/service/firebase.service';
 
 @Injectable()
 export class AuthService {

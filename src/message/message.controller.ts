@@ -1,10 +1,10 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { FirebaseService } from '../firebase/firebase.service';
+import { FirebaseService } from '../firebase/service/firebase.service';
 import { MessageCreateDto } from './dto/message-create.dto';
 import { Message } from './model/message.model';
 import { RoleGuard } from '../auth/guard/role.guard';
-import { Roles } from '../auth/roles.decorator';
-import { Role } from '../auth/Roles.enum';
+import { Roles } from '../auth/decorator/roles.decorator';
+import { Role } from '../auth/enums/Roles.enum';
 import { JwtGuard } from '../auth/guard/jwt.guard';
 
 @UseGuards(JwtGuard)
