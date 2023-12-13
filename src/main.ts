@@ -23,6 +23,7 @@ async function bootstrap() {
     .setTitle('last pang API')
     .setDescription('last pang API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .addTag('API')
     .build();
 

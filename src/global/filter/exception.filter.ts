@@ -3,12 +3,14 @@ import {
   Catch,
   ExceptionFilter,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import {
   BaseException,
   UnCatchedException,
 } from '../error/exceptions/base.exception';
 import { ValidationException } from '../error/exceptions/validation.exception';
+import { GlobalExceptionCodeEnum } from '../error/enums/exception-code.enum';
 
 // validation Exception 캐치
 @Catch(ValidationException)
@@ -37,7 +39,11 @@ export class ValidationExceptionFilter implements ExceptionFilter {
 // 전역 Exception 캐치
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
+  logger = new Logger(GlobalExceptionFilter.name);
+
   catch(exception: Error, host: ArgumentsHost): void {
+    this.logger.debug(exception);
+
     const ctx = host.switchToHttp(); // Exception Filter가 Http요청 외에도 동작하므로 필요
     const request = ctx.getRequest();
     const response = ctx.getResponse();
