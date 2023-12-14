@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import {
   GlobalExceptionFilter,
+  HttpExceptionFilter,
   ValidationExceptionFilter,
 } from './global/filter/exception.filter';
 import { ValidationException } from './global/error/exceptions/validation.exception';
@@ -41,6 +42,7 @@ async function bootstrap() {
   );
   app.useGlobalFilters(
     new GlobalExceptionFilter(),
+    new HttpExceptionFilter(),
     new ValidationExceptionFilter(),
   );
   await app.listen(8000);

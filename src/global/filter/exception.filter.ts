@@ -5,7 +5,6 @@ import {
   HttpException,
   HttpStatus,
   Logger,
-  UnauthorizedException,
 } from '@nestjs/common';
 import {
   BaseException,
