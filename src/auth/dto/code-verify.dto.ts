@@ -8,7 +8,7 @@ export class VerifyCodeDto {
   })
   @IsString()
   @MinLength(4)
-  @MaxLength(10)
+  @MaxLength(15)
   @IsNotEmpty()
   readonly code: string;
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Role } from '../enums/Roles.enum';
+import { Role, toRoleEnum } from '../enums/Roles.enum';
 import { InvalidVerificationCodeException } from '../../global/error/exceptions/auth.exception';
 import { FirebaseService } from '../../firebase/service/firebase.service';
 
@@ -12,19 +12,26 @@ export class AuthService {
   ) {}
 
   async getTokenByCode(code: string) {
-    const { code: verificationCode } = await this.firebaseService.getOne(
+    const validCodes = await this.firebaseService.getOne(
       'codes',
       'verification',
     );
-    if (verificationCode != code) {
-      throw new InvalidVerificationCodeException();
-    }
-    return await this.createToken();
+    const role = this.matchRoleByCode(validCodes, code);
+    return await this.createToken(role);
   }
 
-  async createToken() {
-    const payload = { role: Role.JOON };
+  async createToken(role: Role) {
+    const payload = { role };
     const accessToken = await this.jwtService.signAsync(payload);
     return { accessToken };
+  }
+
+  matchRoleByCode(validCodes: object, code: string): Role {
+    for (const [role, validCode] of Object.entries(validCodes)) {
+      if (validCode === code) {
+        return toRoleEnum(role);
+      }
+    }
+    throw new InvalidVerificationCodeException();
   }
 }
