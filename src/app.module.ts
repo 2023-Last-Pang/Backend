@@ -8,6 +8,9 @@ import {
 } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import { FirebaseModule } from './firebase/firebase.module';
+import { AuthModule } from './auth/auth.module';
+import { MessageModule } from './message/message.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
@@ -27,7 +30,15 @@ export class LoggerMiddleware implements NestMiddleware {
 }
 
 @Module({
-  imports: [FirebaseModule],
+  imports: [
+    FirebaseModule,
+    AuthModule,
+    MessageModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: `.env`,
+    }),
+  ],
   controllers: [],
   providers: [],
 })
