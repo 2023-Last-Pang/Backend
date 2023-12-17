@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import serviceAccount from '../firebase-adminsdk.json';
+import { MessagePaginationDto } from '../../message/dto/message-pagination.dto';
 
 @Injectable()
 export class FirebaseService {
@@ -40,5 +41,44 @@ export class FirebaseService {
       this.logger.warn('No such document!');
     }
     return doc.data();
+  }
+
+  async getAll(collection: string, { page, limit }: MessagePaginationDto) {
+    const docsRef = this.db.collection(collection);
+
+    const totalDocs = (await docsRef.get()).size;
+    const totalPage = Math.ceil(totalDocs / limit);
+
+    const snapshot = await docsRef
+      .orderBy('createdAt', 'desc')
+      .offset((page - 1) * limit)
+      .limit(limit)
+      .get();
+
+    // const data = snapshot.docs.map((doc) => doc.data() as Message);
+
+    const data = snapshot.docs.map((doc) => {
+      const docData = doc.data();
+      const createdAtSeconds = docData.createdAt._seconds;
+      const createdAtNanoseconds = docData.createdAt._nanoseconds;
+      docData.createdAt = new Date(
+        createdAtSeconds * 1000 + createdAtNanoseconds / 1000000,
+      );
+
+      const updatedAtSeconds = docData.updatedAt._seconds;
+      const updatedAtNanoseconds = docData.updatedAt._nanoseconds;
+      docData.updatedAt = new Date(
+        updatedAtSeconds * 1000 + updatedAtNanoseconds / 1000000,
+      );
+
+      return docData;
+    });
+
+    return {
+      data,
+      limit,
+      page,
+      totalPage,
+    };
   }
 }
