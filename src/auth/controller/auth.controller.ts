@@ -10,7 +10,7 @@ export class AuthController {
 
   @ApiOperation({ summary: '인증코드로 토큰 발급' })
   @Post('/verify')
-  async verify(@Body() verifyCodeDto: VerifyCodeDto) {
-    return await this.authService.getTokenByCode(verifyCodeDto.code);
+  async verify(@Body() { code }: VerifyCodeDto) {
+    return await this.authService.getTokenByCode(code);
   }
 }
