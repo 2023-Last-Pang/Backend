@@ -23,11 +23,11 @@ export class BaseException extends HttpException implements IBaseException {
 
 // 어플리케이션에서 처리하지 못한 Exception을 위한 클래스
 export class UnCatchedException extends BaseException {
-  constructor(message?: string) {
+  constructor() {
     super(
       HttpStatus.INTERNAL_SERVER_ERROR,
       GlobalExceptionCodeEnum.UnCached,
-      message,
+      'UnCached Server Exception',
     );
   }
 }
