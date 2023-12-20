@@ -11,6 +11,7 @@ import { FirebaseModule } from './firebase/firebase.module';
 import { AuthModule } from './auth/auth.module';
 import { MessageModule } from './message/message.module';
 import { ConfigModule } from '@nestjs/config';
+import { SseModule } from './sse/sse.module';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
@@ -38,6 +39,7 @@ export class LoggerMiddleware implements NestMiddleware {
       isGlobal: true,
       envFilePath: `.env`,
     }),
+    SseModule,
   ],
   controllers: [],
   providers: [],
