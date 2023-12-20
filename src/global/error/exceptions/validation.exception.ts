@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { ValidationError } from 'class-validator';
+
 export interface IValidationException {
   statusCode: number;
   errors: ValidationError[];

@@ -16,8 +16,6 @@ import { ValidationException } from '../error/exceptions/validation.exception';
 @Catch(ValidationException)
 export class ValidationExceptionFilter implements ExceptionFilter {
   catch(exception: ValidationException, host: ArgumentsHost): void {
-    console.log('validation exception occurred');
-
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
@@ -41,6 +39,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
   logger = new Logger(HttpExceptionFilter.name);
 
   catch(exception: HttpException, host: ArgumentsHost): void {
+    this.logger.error(exception);
+
     const ctx = host.switchToHttp(); // Exception Filter가 Http요청 외에도 동작하므로 필요
     const request = ctx.getRequest();
     const response = ctx.getResponse();
@@ -60,21 +60,20 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   logger = new Logger(GlobalExceptionFilter.name);
 
   catch(exception: Error, host: ArgumentsHost): void {
-    console.log(exception);
-
     const ctx = host.switchToHttp(); // Exception Filter가 Http요청 외에도 동작하므로 필요
     const request = ctx.getRequest();
     const response = ctx.getResponse();
 
     const res =
       exception instanceof BaseException ? exception : new UnCatchedException();
+    this.logger.error(res);
 
     if (exception instanceof BaseException) {
       // Custom Error Response 정의
       response.status(res.statusCode).json({
         statusCode: res.statusCode,
         errorCode: res.errorCode,
-        message: res.message,
+        message: exception.message,
         timestamp: new Date(),
         path: request.url,
       });
