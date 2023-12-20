@@ -46,39 +46,43 @@ export class FirebaseService {
   async getAll(collection: string, { page, limit }: MessagePaginationDto) {
     const docsRef = this.db.collection(collection);
 
-    const totalDocs = (await docsRef.get()).size;
-    const totalPage = Math.ceil(totalDocs / limit);
+    // const totalDocs = (await docsRef.get()).size;
+    // const totalPage = Math.ceil(totalDocs / limit);
 
     const snapshot = await docsRef
       .orderBy('createdAt', 'desc')
-      .offset((page - 1) * limit)
-      .limit(limit)
+      // .offset((page - 1) * limit)
+      // .limit(limit)
       .get();
-
-    // const data = snapshot.docs.map((doc) => doc.data() as Message);
 
     const data = snapshot.docs.map((doc) => {
       const docData = doc.data();
-      const createdAtSeconds = docData.createdAt._seconds;
-      const createdAtNanoseconds = docData.createdAt._nanoseconds;
-      docData.createdAt = new Date(
-        createdAtSeconds * 1000 + createdAtNanoseconds / 1000000,
-      );
+      // createdAt 필드가 있는 경우에만 변환
+      if (docData.createdAt) {
+        const createdAtSeconds = docData.createdAt._seconds;
+        const createdAtNanoseconds = docData.createdAt._nanoseconds;
+        docData.createdAt = new Date(
+          createdAtSeconds * 1000 + createdAtNanoseconds / 1000000,
+        );
+      }
 
-      const updatedAtSeconds = docData.updatedAt._seconds;
-      const updatedAtNanoseconds = docData.updatedAt._nanoseconds;
-      docData.updatedAt = new Date(
-        updatedAtSeconds * 1000 + updatedAtNanoseconds / 1000000,
-      );
+      // updatedAt 필드가 있는 경우에만 변환
+      if (docData.updatedAt) {
+        const updatedAtSeconds = docData.updatedAt._seconds;
+        const updatedAtNanoseconds = docData.updatedAt._nanoseconds;
+        docData.updatedAt = new Date(
+          updatedAtSeconds * 1000 + updatedAtNanoseconds / 1000000,
+        );
+      }
 
       return docData;
     });
 
     return {
       data,
-      limit,
-      page,
-      totalPage,
+      // limit,
+      // page,
+      // totalPage,
     };
   }
 }
