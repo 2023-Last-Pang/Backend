@@ -23,7 +23,7 @@ export class AuthService {
   async createToken(role: Role) {
     const payload = { role };
     const accessToken = await this.jwtService.signAsync(payload);
-    return { accessToken };
+    return { accessToken, role };
   }
 
   matchRoleByCode(validCodes: object, code: string): Role {
