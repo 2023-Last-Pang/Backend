@@ -37,7 +37,6 @@ export class LoggerMiddleware implements NestMiddleware {
     MessageModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `.env`,
     }),
     SseModule,
   ],

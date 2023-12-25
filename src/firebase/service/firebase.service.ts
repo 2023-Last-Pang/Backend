@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as admin from 'firebase-admin';
-import serviceAccount from '../firebase-adminsdk.json';
+import { FirebaseConfigService } from './firebase-config.service';
 import { MessagePaginationDto } from '../../message/dto/message-pagination.dto';
 
 @Injectable()
@@ -8,9 +8,11 @@ export class FirebaseService {
   public db: admin.firestore.Firestore;
   private readonly logger = new Logger(FirebaseService.name);
 
-  constructor() {
+  constructor(private firebaseConfigService: FirebaseConfigService) {
+    const serviceAccount = this.firebaseConfigService.firebaseConfig;
+
     admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+      credential: admin.credential.cert(serviceAccount),
     });
 
     this.db = admin.firestore();
