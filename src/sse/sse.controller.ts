@@ -7,7 +7,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 export class SseController {
   // 10초에 한번씩 서버 시간 전송
   @ApiOperation({
-    summary: 'SSE로 5초에 한번씩 서버 시간 unixTimestamp로 전송',
+    summary: 'SSE로 10초에 한번씩 서버 시간(ms) unixTimestamp로 전송',
   })
   @ApiResponse({
     status: 200,
@@ -28,9 +28,9 @@ export class SseController {
   })
   @Sse('time')
   sse(): Observable<MessageEvent> {
-    return interval(5000).pipe(
+    return interval(10000).pipe(
       map(() => ({
-        data: { unixTime: Math.floor(new Date().getTime() / 1000) },
+        data: { unixTime: Math.floor(new Date().getTime()) },
       })),
     );
   }
