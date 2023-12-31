@@ -45,7 +45,7 @@ async function bootstrap() {
     new HttpExceptionFilter(),
     new ValidationExceptionFilter(),
   );
-  await app.listen(8000);
+  await app.listen(8000, '0.0.0.0');
 }
 
 bootstrap();
